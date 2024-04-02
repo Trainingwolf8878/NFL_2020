@@ -1,0 +1,64 @@
+Me:==> quarto preview paper.qmd --to pdf --no-watch-inputs --no-browse
+
+
+
+processing file: paper.qmd
+                                                                                                             
+output file: paper.knit.md
+
+pandoc 
+  to: latex
+  output-file: paper.tex
+  standalone: true
+  shift-heading-level-by: -1
+  pdf-engine: xelatex
+  variables:
+    graphics: true
+    tables: true
+  default-image-extension: pdf
+  number-sections: true
+  
+metadata
+  documentclass: scrartcl
+  classoption:
+    - DIV=11
+    - numbers=noendperiod
+  papersize: letter
+  header-includes:
+    - '\KOMAoption{captions}{tableheading}'
+  block-headings: true
+  title: NFL Quarterback Passing EPA Forecasting
+  subtitle: NFL Quarterback Passing EPA Forecasting
+  author: Lin Dai
+  thanks: ' Code and data available at: <https://github.com/Trainingwolf8878/NFL_2020>'
+  date: today
+  date-format: long
+  
+running xelatex - 1
+  This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex)
+   restricted \write18 enabled.
+  entering extended mode
+  
+updating tlmgr
+
+updating existing packages
+
+compilation failed- error
+LaTeX Error: Two \documentclass or \documentstyle commands.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.22 \documentclass{
+                    ltxdoc} 
+
+see paper.log for more information.
+
+Chatgpt:This error message indicates that there are two \documentclass commands in your LaTeX document (paper.tex). This typically occurs when there is more than one document class defined in your Quarto file (paper.qmd), or when the document class is defined elsewhere in your project.
+
+To resolve this issue, please check your paper.qmd file and ensure that there is only one \documentclass definition. Remove any duplicate or unnecessary document class definitions. Additionally, review your project to ensure that the document class is not defined in multiple places.
+
+You can also refer to the paper.log file for more detailed information about the error, which may help you locate and fix the problem more effectively.
+
+
