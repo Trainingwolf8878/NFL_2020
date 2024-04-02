@@ -1,0 +1,119 @@
+---
+title: "NFL Quarterback Passing EPA Forecasting"
+subtitle: "NFL Quarterback Passing EPA Forecasting"
+author: Lin Dai
+thanks: " Code and data available at: <https://github.com/Trainingwolf8878/NFL_2020>"
+date: today
+date-format: long
+format: pdf
+number-sections: true
+---
+## Working space set up
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(tidymodels)
+library(modelsummary)
+library(nflverse)
+library(dplyr)
+```
+
+## Import data
+
+```{r}
+#| echo: false
+#| message: false
+
+nfl_2020 <- read_csv(here::here("data/analysis_data.csv"))
+nfl_2020_train <- nfl_2020 |>
+  filter(week<=9)
+nfl_2020_test <- nfl_2020 |>
+  filter(week>9)
+```
+
+## Model
+
+```{r}
+#| label: tbl-modelresults
+#| tbl-cap: "Explanatory models o nfl_2020"
+#| echo: false
+
+first_model_tidymodels <-
+  linear_reg() |>
+  set_engine(engine = "lm") |>
+  fit(
+    passing_epa ~ attempts + passing_yards + completions,
+    data = nfl_2020_train
+  )
+
+second_model_tidymodels <-
+  linear_reg() |>
+  set_engine(engine = "lm") |>
+  fit(
+    passing_epa ~ attempts + passing_yards + completions + week,
+    data = nfl_2020_train
+  )
+
+modelsummary(list("Model 1" = first_model_tidymodels,
+                  "Model 2" = second_model_tidymodels))
+```
+
+
+## Predict
+
+```{r}
+#| echo: false
+
+predicted_results <- second_model_tidymodels |>
+  predict(new_data = nfl_2020_test) |>
+  cbind(nfl_2020_test) |>
+  select(recent_team, week, passing_epa, .pred) |>
+  arrange(recent_team,week) |>
+  rename(predicted_passing_epa = .pred)
+
+```
+
+## Model set up
+
+\begin(align)
+y_i |\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
+\mu_i &= \beta_0+\beta_1 x_{1i} + \beta_2 x_{2i}
+\end{align}
+
+where $y_i$ refers to the total expected points added on pass attempts, $x_{1i}$ refers the number of attempts, $x_{2i}$ refers to the expected points added on pass plays, $x_{3i}$ refers to the number of completed passes.
+
+## Result
+
+```{r}
+#| echo: false
+
+predicted_results %>%
+  ggplot(aes(x = passing_epa, y = predicted_passing_epa)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red")
+
+```
+## What did I do
+Through the provided code, I accomplished the following tasks:
+
+Firstly, I set up the working environment by loading the necessary R packages, including tidyverse, tidymodels, modelsummary, nflverse, and dplyr. These packages provide the functionalities needed for data manipulation, modeling, and visualization.
+
+Next, I imported the 2020 NFL data and split it into a training set (consisting of data from the first 9 weeks) and a test set (consisting of data from week 10 onwards) for modeling and prediction purposes.
+
+Then, I constructed two linear regression models using the tidymodels package to model the passing EPA (Expected Points Added). The first model considered factors such as the number of attempts, passing yards, and completions, while the second model also incorporated the week of the season. I used the modelsummary package to summarize and compare the results of these two models.
+
+Subsequently, I utilized the second model to make predictions on the test set and merged and arranged the predicted results with the actual data.
+
+Finally, I plotted a scatterplot of the predicted passing EPA against the actual passing EPA and added a red diagonal line to visually compare the relationship between the two.
+
+Through these tasks, I was able to establish and evaluate two models for predicting passing EPA and assess their predictive performance on the test set, providing a foundation for further analysis and interpretation.
+
+## Conclusion
+
+In this project, we aimed to develop predictive models for the Expected Points Added (EPA) of NFL quarterbacks during the 2023 regular season. By the graph we can see the point is near the red line, which we can say our predict value is near the actual value.
+
+
