@@ -62,6 +62,11 @@ modelsummary(list("Model 1" = first_model_tidymodels,
                   "Model 2" = second_model_tidymodels))
 ```
 
+In this model, we employed linear regression to predict the Passing Expected Points Added (EPA) of NFL players. EPA serves as a metric to gauge the potential impact of each play on a team's score. Therefore, the model aims to predict the EPA of each passing play by analyzing factors such as the number of pass attempts, passing yards, and completions.
+
+The model comprises two versions labeled as "Model 1" and "Model 2". The distinction between them lies in the number of predictor variables included in the model. In "Model 1", we only considered three factors—pass attempts, passing yards, and completions—as predictor variables. Conversely, in "Model 2", we additionally incorporated the week number of the season as a predictor variable.
+
+By training these two models, we obtain predictions for Passing EPA, allowing us to understand the influence of different factors on EPA. Additionally, by comparing the performance of the two models, we can determine which one provides a more accurate and effective explanation of Passing EPA.
 
 ## Predict
 
