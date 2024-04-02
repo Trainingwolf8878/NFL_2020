@@ -11,6 +11,7 @@ number-sections: true
 ## Working space set up
 
 ```{r}
+#| echo: false
 #| include: false
 #| warning: false
 #| message: false
